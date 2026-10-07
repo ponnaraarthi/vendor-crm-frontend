@@ -27,7 +27,7 @@ button {
   transition: 0.2s ease;
 }
 
-/* APP */
+
 
 .app {
   width: 100%;
@@ -36,7 +36,7 @@ button {
   background: #f7f9f7;
 }
 
-/* SIDEBAR */
+
 
 .sidebar {
   width: 245px;
@@ -157,7 +157,7 @@ button {
   flex-shrink: 0;
 }
 
-/* MAIN */
+
 
 .main {
   width: calc(100% - 245px);
@@ -167,7 +167,7 @@ button {
   background: #f7f9f7;
 }
 
-/* HEADER */
+
 
 .header {
   width: 100%;
@@ -281,7 +281,7 @@ button {
   background: #ddf3ed;
 }
 
-/* SUMMARY */
+
 
 .summary-grid {
   display: grid;
@@ -309,7 +309,6 @@ button {
   font-size: 25px;
 }
 
-/* PANEL */
 
 .panel {
   background: #ffffff;
@@ -351,7 +350,6 @@ button {
   border-color: #2a9d8f;
 }
 
-/* TABLE */
 
 .table-container {
   width: 100%;
@@ -397,7 +395,7 @@ tbody tr:hover {
   font-weight: 600;
 }
 
-/* LIFECYCLE */
+
 
 .lifecycle {
   display: flex;
@@ -415,7 +413,7 @@ tbody tr:hover {
   font-weight: 600;
 }
 
-/* FEATURES */
+
 
 .feature-grid {
   display: grid;
@@ -444,7 +442,6 @@ tbody tr:hover {
   line-height: 1.5;
 }
 
-/* PAGINATION */
 
 .pagination {
   display: flex;
@@ -471,7 +468,6 @@ tbody tr:hover {
   color: #718096;
 }
 
-/* TOP POPUPS */
 
 .top-popup {
   position: absolute;
@@ -582,7 +578,7 @@ tbody tr:hover {
   background: #fde9e7;
 }
 
-/* MODAL */
+
 
 .modal-overlay {
   position: fixed;
@@ -627,7 +623,6 @@ tbody tr:hover {
   margin-top: 8px;
 }
 
-/* LAPTOP / TABLET */
 
 @media (max-width: 900px) {
   .sidebar {
@@ -648,7 +643,6 @@ tbody tr:hover {
   }
 }
 
-/* SMALL SCREEN */
 
 @media (max-width: 700px) {
   .sidebar {
@@ -677,7 +671,7 @@ tbody tr:hover {
   }
 }
 
-/* MOBILE */
+
 
 @media (max-width: 560px) {
   .app {
