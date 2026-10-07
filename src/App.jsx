@@ -3,25 +3,14 @@ import "./App.css";
 
 const orderStatuses = [
   "Created",
-  "Confirmed",
   "Processing",
-  "Shipped",
   "Delivered",
-  "Cancelled",
-  "Returned",
-  "Refunded",
 ];
 
 const deliveryStatuses = [
   "Created",
-  "Assigned",
-  "Pickup",
   "In Transit",
-  "Out for Delivery",
   "Delivered",
-  "Failed Delivery",
-  "Cancelled",
-  "Returned",
 ];
 
 function App() {
@@ -46,6 +35,7 @@ function App() {
     </div>
   );
 }
+
 function Sidebar({ module, setModule }) {
   return (
     <aside className="sidebar">
@@ -91,12 +81,37 @@ function Sidebar({ module, setModule }) {
     </aside>
   );
 }
+
 function Header({ module }) {
+  const [showSearch, setShowSearch] = useState(false);
+  const [showNotifications, setShowNotifications] =
+    useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  const handleSearch = () => {
+    setShowSearch(!showSearch);
+    setShowNotifications(false);
+    setShowProfile(false);
+  };
+
+  const handleNotifications = () => {
+    setShowNotifications(!showNotifications);
+    setShowSearch(false);
+    setShowProfile(false);
+  };
+
+  const handleProfile = () => {
+    setShowProfile(!showProfile);
+    setShowSearch(false);
+    setShowNotifications(false);
+  };
+
   return (
     <header className="header">
       <div>
         <p className="breadcrumb">
-          Vendor CRM / {module === "OMS" ? "OMS" : "Delivery Engine"}
+          Vendor CRM /{" "}
+          {module === "OMS" ? "OMS" : "Delivery Engine"}
         </p>
 
         <h1>
@@ -107,10 +122,24 @@ function Header({ module }) {
       </div>
 
       <div className="header-right">
-        <button className="header-button">Search</button>
-        <button className="header-button">Notifications</button>
+        <button
+          className="header-button"
+          onClick={handleSearch}
+        >
+          Search
+        </button>
 
-        <div className="header-user">
+        <button
+          className="header-button"
+          onClick={handleNotifications}
+        >
+          Notifications
+        </button>
+
+        <div
+          className="header-user"
+          onClick={handleProfile}
+        >
           <div className="avatar">PR</div>
 
           <div>
@@ -118,10 +147,56 @@ function Header({ module }) {
             <p>Administrator</p>
           </div>
         </div>
+
+        {showSearch && (
+          <div className="top-popup search-popup">
+            <h3>Search</h3>
+
+            <input
+              type="text"
+              placeholder="Search..."
+              autoFocus
+            />
+          </div>
+        )}
+
+        {showNotifications && (
+          <div className="top-popup notification-popup">
+            <h3>Notifications</h3>
+
+            <div className="notification-item">
+              <span className="notification-dot"></span>
+              <div>
+                <strong>No new notifications</strong>
+                <p>
+                  You are all caught up.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showProfile && (
+          <div className="top-popup profile-popup">
+            <div className="profile-details">
+              <div className="avatar">PR</div>
+
+              <div>
+                <strong>Priya Raghavan</strong>
+                <p>Administrator</p>
+              </div>
+            </div>
+
+            <button className="logout-button">
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );
 }
+
 function OMS() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
@@ -129,7 +204,9 @@ function OMS() {
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
-      order.id?.toLowerCase().includes(search.toLowerCase());
+      order.id?.toLowerCase().includes(
+        search.toLowerCase()
+      );
 
     const matchesFilter =
       filter === "All" || order.status === filter;
@@ -150,10 +227,25 @@ function OMS() {
       </div>
 
       <div className="summary-grid">
-        <Summary title="Total Orders" value={orders.length} />
-        <Summary title="Processing" value="0" />
-        <Summary title="Shipped" value="0" />
-        <Summary title="Delivered" value="0" />
+        <Summary
+          title="Total Orders"
+          value={orders.length}
+        />
+
+        <Summary
+          title="Processing"
+          value="0"
+        />
+
+        <Summary
+          title="Shipped"
+          value="0"
+        />
+
+        <Summary
+          title="Delivered"
+          value="0"
+        />
       </div>
 
       <section className="panel">
@@ -162,17 +254,24 @@ function OMS() {
             type="text"
             placeholder="Search orders"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
           />
 
           <select
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) =>
+              setFilter(e.target.value)
+            }
           >
             <option value="All">All</option>
 
             {orderStatuses.map((status) => (
-              <option key={status} value={status}>
+              <option
+                key={status}
+                value={status}
+              >
                 {status}
               </option>
             ))}
@@ -220,6 +319,7 @@ function OMS() {
     </main>
   );
 }
+
 function OrderTable({ orders }) {
   return (
     <div className="table-container">
@@ -236,16 +336,25 @@ function OrderTable({ orders }) {
         <tbody>
           {orders.length === 0 ? (
             <tr>
-              <td colSpan="4">No orders found.</td>
+              <td colSpan="4">
+                No orders found.
+              </td>
             </tr>
           ) : (
             orders.map((order) => (
               <tr key={order.id}>
                 <td>{order.id}</td>
+
                 <td>
-                  <StatusBadge status={order.status} />
+                  <StatusBadge
+                    status={order.status}
+                  />
                 </td>
-                <td>{order.paymentStatus}</td>
+
+                <td>
+                  {order.paymentStatus}
+                </td>
+
                 <td>View</td>
               </tr>
             ))
@@ -263,7 +372,10 @@ function OrderLifecycle() {
 
       <div className="lifecycle">
         {orderStatuses.map((status) => (
-          <div className="lifecycle-step" key={status}>
+          <div
+            className="lifecycle-step"
+            key={status}
+          >
             <span>{status}</span>
           </div>
         ))}
@@ -276,15 +388,21 @@ function DeliveryEngine() {
   const [filter, setFilter] = useState("All");
   const [deliveries] = useState([]);
 
-  const filteredDeliveries = deliveries.filter((delivery) => {
-    const matchesSearch =
-      delivery.id?.toLowerCase().includes(search.toLowerCase());
+  const filteredDeliveries =
+    deliveries.filter((delivery) => {
+      const matchesSearch =
+        delivery.id?.toLowerCase().includes(
+          search.toLowerCase()
+        );
 
-    const matchesFilter =
-      filter === "All" || delivery.status === filter;
+      const matchesFilter =
+        filter === "All" ||
+        delivery.status === filter;
 
-    return matchesSearch && matchesFilter;
-  });
+      return (
+        matchesSearch && matchesFilter
+      );
+    });
 
   return (
     <main className="content">
@@ -299,10 +417,25 @@ function DeliveryEngine() {
       </div>
 
       <div className="summary-grid">
-        <Summary title="Total Deliveries" value={deliveries.length} />
-        <Summary title="In Transit" value="0" />
-        <Summary title="Out for Delivery" value="0" />
-        <Summary title="Delivered" value="0" />
+        <Summary
+          title="Total Deliveries"
+          value={deliveries.length}
+        />
+
+        <Summary
+          title="In Transit"
+          value="0"
+        />
+
+        <Summary
+          title="Out for Delivery"
+          value="0"
+        />
+
+        <Summary
+          title="Delivered"
+          value="0"
+        />
       </div>
 
       <section className="panel">
@@ -311,24 +444,33 @@ function DeliveryEngine() {
             type="text"
             placeholder="Search deliveries"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
           />
 
           <select
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) =>
+              setFilter(e.target.value)
+            }
           >
             <option value="All">All</option>
 
             {deliveryStatuses.map((status) => (
-              <option key={status} value={status}>
+              <option
+                key={status}
+                value={status}
+              >
                 {status}
               </option>
             ))}
           </select>
         </div>
 
-        <DeliveryTable deliveries={filteredDeliveries} />
+        <DeliveryTable
+          deliveries={filteredDeliveries}
+        />
       </section>
 
       <DeliveryLifecycle />
@@ -374,6 +516,7 @@ function DeliveryEngine() {
     </main>
   );
 }
+
 function DeliveryTable({ deliveries }) {
   return (
     <div className="table-container">
@@ -390,7 +533,9 @@ function DeliveryTable({ deliveries }) {
         <tbody>
           {deliveries.length === 0 ? (
             <tr>
-              <td colSpan="4">No deliveries found.</td>
+              <td colSpan="4">
+                No deliveries found.
+              </td>
             </tr>
           ) : (
             deliveries.map((delivery) => (
@@ -398,7 +543,9 @@ function DeliveryTable({ deliveries }) {
                 <td>{delivery.id}</td>
 
                 <td>
-                  <StatusBadge status={delivery.status} />
+                  <StatusBadge
+                    status={delivery.status}
+                  />
                 </td>
 
                 <td>{delivery.partner}</td>
@@ -420,7 +567,10 @@ function DeliveryLifecycle() {
 
       <div className="lifecycle">
         {deliveryStatuses.map((status) => (
-          <div className="lifecycle-step" key={status}>
+          <div
+            className="lifecycle-step"
+            key={status}
+          >
             <span>{status}</span>
           </div>
         ))}
@@ -428,6 +578,7 @@ function DeliveryLifecycle() {
     </section>
   );
 }
+
 function Summary({ title, value }) {
   return (
     <div className="summary-card">
@@ -445,7 +596,10 @@ function StatusBadge({ status }) {
   );
 }
 
-function FeatureCard({ title, description }) {
+function FeatureCard({
+  title,
+  description,
+}) {
   return (
     <div className="feature-card">
       <h3>{title}</h3>
@@ -458,11 +612,14 @@ function Pagination() {
   return (
     <div className="pagination">
       <button>Previous</button>
+
       <span>Page 1</span>
+
       <button>Next</button>
     </div>
   );
 }
+
 function CreateOrderModal({ onClose }) {
   return (
     <div className="modal-overlay">
@@ -478,7 +635,10 @@ function CreateOrderModal({ onClose }) {
           <option>Select Status</option>
 
           {orderStatuses.map((status) => (
-            <option key={status} value={status}>
+            <option
+              key={status}
+              value={status}
+            >
               {status}
             </option>
           ))}
@@ -514,8 +674,12 @@ function CreateDeliveryModal({ onClose }) {
 
         <select>
           <option>Select Status</option>
-{deliveryStatuses.map((status) => (
-            <option key={status} value={status}>
+
+          {deliveryStatuses.map((status) => (
+            <option
+              key={status}
+              value={status}
+            >
               {status}
             </option>
           ))}
@@ -537,4 +701,5 @@ function CreateDeliveryModal({ onClose }) {
     </div>
   );
 }
+
 export default App;
